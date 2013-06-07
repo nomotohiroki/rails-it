@@ -4,6 +4,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :id
       t.string :email
       t.string :library_path
+      t.string :key
       t.boolean :complete
       t.timestamp :created_on
 

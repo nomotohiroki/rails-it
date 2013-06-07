@@ -1,9 +1,40 @@
-<h1>List#list</h1>
-<p>Find me in app/views/list/list.html.erb</p>
-<dl>
-<% for artist in @artists %>
-<dt><%= artist.name %></dt>
-<dd><% for track in artist.tracks %><%= track.album.name %>:<%= track.name %><br/><% end %></dd>
-<% end %>
-</dl>
-
+<div class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <h1>List#list</h1>
+    <p>Find me in app/views/list/list.html.erb</p>
+  </div>
+</div>
+<header style="padding-top: 100px;">
+  
+</header>
+<div class="content">
+<div class="row">
+  <div class="span3">
+    <ul class="nav nav-tabs nav-stacked">
+    <% for artist in @artists %>
+      <li><a href="javascript:void(0);" onclick="$('ul[id^=albums-], ul[id^=tracks-]').hide();$('#albums-<%= artist.id %>').show();"><%= artist.name %></a></li>
+    <% end %>
+    </ul>
+  </div>
+  <div class="span4">
+    <% for artist in @artists %>
+      <ul class="nav nav-tabs nav-stacked" style="display: none;" id="albums-<%= artist.id %>">
+        <% for album in artist.albums %>
+          <li><a href="javascript:void(0);" onclick="$('ul[id^=tracks-]').hide();$('#tracks-<%= album.id %>').show();"><%= album.name %></a></li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+  <div class="span5">
+    <% for artist in @artists %>
+      <% for album in artist.albums %>
+        <ul class="nav nav-tabs nav-stacked" style="display: none;" id="tracks-<%= album.id %>">
+          <% for track in album.tracks %>
+            <li><a href="javascript:void(0);" onclick=""><%= track.name %></a></li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+</div>

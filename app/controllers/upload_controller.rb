@@ -1,10 +1,10 @@
 require 'itunes/library'
-
+require 'digest/sha1'
 
 class UploadController < ApplicationController
   def uploadItunesXml
     file = params[:itunesXml]
-    crypt = params[:email].crypt((rand 10).to_s + (rand 10).to_s + file.original_filename)    
+    crypt = Digest::SHA1.hexdigest(params[:email].crypt((rand 10).to_s + (rand 10).to_s + file.original_filename))
     filepath = "tmp/xml/" + crypt + ".xml"
     File.open(filepath, "wb"){|f| f.write(file.read)}
     @library = ITunes::Library.load(filepath)

@@ -5,7 +5,7 @@ class CreateTracks < ActiveRecord::Migration
       t.string :name
       t.integer :artist_id
       t.integer :album_id
-      t.integer :album_artist
+      t.string :track_artist
       t.integer :track_no
       t.string :composer
       t.integer :total_time

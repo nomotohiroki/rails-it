@@ -6,35 +6,36 @@ class Tasks::LoadToDbTask
     for user in users
       lib = ITunes::Library.load(user.library_path)
       for libtrack in lib.tracks
-        if libtrack.video? || libtrack.movie? || libtrack.podcast? || libtrack.artist == nil || libtrack.name == nil || libtrack['Total Time']  == nil
+        if libtrack.video? || libtrack.movie? || libtrack.podcast? || libtrack['Disabled'] || libtrack.artist == nil || libtrack.name == nil || libtrack['Total Time']  == nil
           next
         end
 
         albumArtistName = nil
         if libtrack['Compilation']
           albumArtistName = 'V.A.'
-        else if libtrack['Album Artist'] == nil
+        elsif libtrack['Album Artist'] != nil
           albumArtistName = libtrack['Album Artist']
         else
           albumArtistName = libtrack.artist
         end
 
-        artist = Artist.find_by_name(albumArtistName)
         doNext = true
+        artist = Artist.find_by_name(albumArtistName)
         if artist == nil
           artist = Artist.new
-          artist.name = libtrack.artist
+          artist.name = albumArtistName
           artist.save
           doNext = false
         end
 
-
+        album = nil
         if doNext
           album = Album.find_by_artist_id_and_name(artist.id, libtrack.album)
         end
         if album == nil
           album = Album.new
-          album.name = libtrack.name
+          album.name = libtrack.album
+          album.track_count = libtrack['Track Count']
           album.artist_id = artist.id
           album.save
           doNext = false
@@ -48,6 +49,7 @@ class Tasks::LoadToDbTask
           track = Track.new
           track.name = libtrack.name
           track.artist_id = artist.id
+          track.album_id = album.id
           track.track_artist = libtrack.artist
           track.track_no = libtrack.number
           track.total_time = libtrack.total_time

@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20130606061235) do
 
   create_table "albums", :force => true do |t|
     t.string   "name"
+    t.integer  "artist_id"
     t.integer  "track_count"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -30,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20130606061235) do
     t.string   "name"
     t.integer  "artist_id"
     t.integer  "album_id"
-    t.integer  "album_artist"
+    t.string   "track_artist"
     t.integer  "track_no"
     t.string   "composer"
     t.integer  "total_time"
@@ -48,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130606061235) do
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "library_path"
+    t.string   "key"
     t.boolean  "complete"
     t.datetime "created_on"
     t.datetime "created_at",   :null => false
