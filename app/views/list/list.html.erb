@@ -1,0 +1,9 @@
+<h1>List#list</h1>
+<p>Find me in app/views/list/list.html.erb</p>
+<dl>
+<% for artist in @artists %>
+<dt><%= artist.name %></dt>
+<dd><% for track in artist.tracks %><%= track.album.name %>:<%= track.name %><br/><% end %></dd>
+<% end %>
+</dl>
+

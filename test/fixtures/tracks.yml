@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  id: 1
+  name: MyString
+  artist_id: 1
+  album_id: 1
+  album_artist: 1
+  track_no: 1
+  composer: MyString
+  total_time: 1
+
+two:
+  id: 1
+  name: MyString
+  artist_id: 1
+  album_id: 1
+  album_artist: 1
+  track_no: 1
+  composer: MyString
+  total_time: 1

@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Id:</b>
+  <%= @user_track.id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @user_track.user_id %>
+</p>
+
+<p>
+  <b>Track:</b>
+  <%= @user_track.track_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_user_track_path(@user_track) %> |
+<%= link_to 'Back', user_tracks_path %>

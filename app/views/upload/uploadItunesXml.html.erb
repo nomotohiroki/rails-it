@@ -1,0 +1,9 @@
+<h1>Upload#uploadItunesXml</h1>
+<p>Find me in app/views/upload/uploadItunesXml.html.erb</p>
+<table>
+<% for track in @library.find_playlist('ミュージック').tracks %>
+<% if track.artist != nil && track.album != nil %>
+<tr><td><%= track.artist %></td><td><%= track.album%></td><td><%= track.name %></tr>
+<% end %>
+<% end %>
+</table>

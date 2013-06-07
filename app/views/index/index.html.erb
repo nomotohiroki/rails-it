@@ -1,0 +1,24 @@
+<div id="contents" class="text-center">
+  <h1>upload your iTunes Library XML file</h1>
+  <form action="/upload/uploadItunesXml" method="POST" enctype="multipart/form-data">
+    <input type="file" id="file-input" name="itunesXml" style="display: none;">
+    <input type="submit" id="submit-upload" style="display: none;"/>
+    <div>
+      <div class="input-append text-center" style="width: 800px;">
+        <span id="cover" class="input-xlarge uneditable-input text-left" onclick="$('#file-input').click();" style="width: 80%;">select file</span>
+        <a class="btn" onclick="$('#file-input').click();"><i class="icon-folder-open"></i></a>
+      </div>
+    </div>
+    <div>
+      <div class="input-append" style="width: 800px;">
+        <input name="email" type="email" placeholder="test@example.com" required style="width: 80%;"/> 
+        <a class="btn" onclick="$('#submit-upload').click();" /><i class="icon-play"></i></a>
+      </div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+  $('#file-input').change(function() {
+    $('#cover').html($(this).val());
+  });
+</script>
