@@ -4,7 +4,10 @@ require 'digest/sha1'
 class UploadController < ApplicationController
   def uploadItunesXml
     file = params[:itunesXml]
-    crypt = Digest::SHA1.hexdigest(params[:email].crypt((rand 10).to_s + (rand 10).to_s + file.original_filename))
+    arr = ("a".."z").to_a + ("0".."9").to_a + ("A".."Z").to_a + ['.', '/']
+    salt = ""
+    2.times { salt += arr[rand(arr.length)] }
+    crypt = Digest::SHA1.hexdigest(params[:email].crypt(salt))
     filepath = "tmp/xml/" + crypt + ".xml"
     File.open(filepath, "wb"){|f| f.write(file.read)}
     @library = ITunes::Library.load(filepath)

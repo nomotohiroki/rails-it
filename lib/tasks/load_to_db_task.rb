@@ -32,7 +32,7 @@ class Tasks::LoadToDbTask
         if doNext
           album = Album.find_by_artist_id_and_name(artist.id, libtrack.album)
         end
-        if album == nil
+        if album == nil && libtrack.album != nil
           album = Album.new
           album.name = libtrack.album
           album.track_count = libtrack['Track Count']
@@ -49,7 +49,9 @@ class Tasks::LoadToDbTask
           track = Track.new
           track.name = libtrack.name
           track.artist_id = artist.id
-          track.album_id = album.id
+          if album != nil
+            track.album_id = album.id
+          end
           track.track_artist = libtrack.artist
           track.track_no = libtrack.number
           track.total_time = libtrack.total_time
