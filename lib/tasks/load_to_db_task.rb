@@ -20,12 +20,19 @@ class Tasks::LoadToDbTask
         end
 
         doNext = true
-        artist = Artist.find_by_name(albumArtistName)
+        artist = Artist.find_by_name(albumArtistName.downcase.gsub(" ", ""))
         if artist == nil
           artist = Artist.new
-          artist.name = albumArtistName
+          artist.name = albumArtistName.downcase.gsub(" ", "")
           artist.save
           doNext = false
+        end
+        artistAlias = ArtistAlias.find_by_name(albumArtistName)
+        if artistAlias == nil
+          artistAlias = ArtistAlias.new
+          artistAlias.name = albumArtistName
+          artistAlias.artist_id = artist.id
+          artistAlias.save
         end
 
         album = nil

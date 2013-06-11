@@ -1,4 +1,7 @@
 ItunesLib::Application.routes.draw do
+  resources :artist_aliases
+
+
   get "list/list"
 
   resources :user_tracks
