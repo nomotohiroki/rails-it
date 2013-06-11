@@ -1,27 +1,12 @@
 ItunesLib::Application.routes.draw do
   resources :artist_aliases
-
-
-  get "list/list"
-
   resources :user_tracks
-
-
   resources :albums
-
-
   resources :artists
-
-
   resources :tracks
-
-
   resources :users
 
-
   post "upload/uploadItunesXml"
-
-  get "get/get"
 
   resources :tracks  # The priority is based upon order of creation:
   # first created -> highest priority.
