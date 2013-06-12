@@ -1,4 +1,8 @@
 ItunesLib::Application.routes.draw do
+  get "track/detail"
+
+  get "track/delete"
+
   resources :artist_aliases
   resources :user_tracks
   resources :albums
@@ -17,6 +21,7 @@ ItunesLib::Application.routes.draw do
   match 'upload/complete' => 'upload#complete'
   root :to => 'index#index'
   match 'list/:key' => 'list#list'
+  match 'track/detail/:id' => 'track#detail'
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

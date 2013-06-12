@@ -36,7 +36,7 @@
       <% for album in artist.albums %>
         <ul class="nav nav-tabs nav-stacked affix span5 tracklist" style="display: none; height: 80%; overflow: auto;" id="tracks-<%= album.id %>">
           <% for track in album.tracks %>
-            <li><a href="javascript:void(0);" onclick=""><span><%= track.name %></span></a></li>
+            <li><a href="javascript:void(0);" id="track-<%= track.id %>"><span class="track_artist hide"><%= track.track_artist %></span><span class="track_name"><%= track.name %></span></a></li>
           <% end %>
         </ul>
       <% end %>
@@ -44,3 +44,15 @@
   </div>
 </div>
 </div>
+<div id="trackDetailModal" class="modal hide fade">
+  <div class="modal-header">
+    this is heaer
+  </div>
+  <div class="modal-body">
+    <div id="modalTrackDetail"></div>
+  </div>
+  <div class="modal-footer">
+    this is footer
+  </div>
+</div>
+
