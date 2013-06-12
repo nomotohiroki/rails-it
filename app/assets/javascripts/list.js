@@ -27,23 +27,33 @@ $(function(){
   youtubeQueryParams = {};
   $("#trackDetailModal").on("show", function() {
     var target = $("#modalTrackDetail", $(this)).empty();
+    $("#trackDetailTitle", $(this)).text(youtubeQueryParams.track_artist + " - " + youtubeQueryParams.track_name);
     $.getJSON(
       "http://gdata.youtube.com/feeds/api/videos",
       {
         v : "2",
         q : youtubeQueryParams.q,
+        "max-results" : "6",
         alt : "json"
       },
       function(result) {
         var videoid, videoname;
+        if (result == undefined || result.feed == undefined || result.feed.entry == undefined || result.feed.entry.length == 0) {
+          $("#trackDetailModal .alert").show();
+          return;
+        }
         $.each(result.feed.entry, function(i, item) {
           videoid = item.media$group.yt$videoid.$t;
           videoname = item.media$group.media$title.$t;
           return false;
         });
-        target.append("<div>"+videoname+"</div>");
+        target.append("<h4>"+videoname+"</h4>");
         target.append("<iframe width='640' height='400' src='http://www.youtube.com/embed/"+videoid+"' frameborder='0' allowfullscreen='allowfullscreen'></iframe>");
       });
+  });
+  $("#trackDetailModal").on("hidden", function() {
+    $("#modalTrackDetail", $(this)).empty();
+    $(".alert", $(this)).hide();
   });
 
   $('a[id^=track-]').click(function() {
