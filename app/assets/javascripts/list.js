@@ -24,22 +24,23 @@ $(function(){
     parent.animate({opacity: "toggle", marginTop: "0px"}, 500);
   };
 
-  youtubeQueryParams = {};
-  $("#trackDetailModal").on("show", function() {
-    var target = $("#modalTrackDetail", $(this)).empty();
-    $("#trackDetailTitle", $(this)).text(youtubeQueryParams.track_artist + " - " + youtubeQueryParams.track_name);
+  function loadMovie(targetCarouselItem) {
+    if (targetCarouselItem.hasClass("loaded")) {
+      return;
+    }
+    var q = $("span", targetCarouselItem).text();
     $.getJSON(
       "http://gdata.youtube.com/feeds/api/videos",
       {
         v : "2",
-        q : youtubeQueryParams.q,
+        q : q,
         "max-results" : "6",
         alt : "json"
       },
       function(result) {
         var videoid, videoname;
         if (result == undefined || result.feed == undefined || result.feed.entry == undefined || result.feed.entry.length == 0) {
-          $("#trackDetailModal .alert").show();
+          targetCarouselItem.append("<div class='alert'>Sorry, We cannot found this songs movie from youtube</div>");
           return;
         }
         $.each(result.feed.entry, function(i, item) {
@@ -47,24 +48,35 @@ $(function(){
           videoname = item.media$group.media$title.$t;
           return false;
         });
-        target.append("<h4>"+videoname+"</h4>");
-        target.append("<iframe width='640' height='400' src='http://www.youtube.com/embed/"+videoid+"' frameborder='0' allowfullscreen='allowfullscreen'></iframe>");
-      });
-  });
-  $("#trackDetailModal").on("hidden", function() {
-    $("#modalTrackDetail", $(this)).empty();
-    $(".alert", $(this)).hide();
+        targetCarouselItem.append("<h4>"+videoname+"</h4>");
+        targetCarouselItem.append("<div style='text-align:center;'><iframe width='560' height='315' src='http://www.youtube.com/embed/"+videoid+"' frameborder='0' allowfullscreen='allowfullscreen'></iframe></div>");
+        targetCarouselItem.addClass("loaded");
+      }
+    );
+  };
+
+  $("#c", $(this)).bind("slid", function() {
+    $("#trackDetailTitle").text($(".active > span", $(this)).text());
   });
 
+  $("#c").carousel({interval:false});
+
   $('a[id^=track-]').click(function() {
-    var track_artist = $('.track_artist', this).text();
-    var track_name   = $(".track_name", this).text();
-    var q = track_artist  + " " + track_name;
-    youtubeQueryParams = {
-      track_artist : track_artist,
-      track_name   : track_name,
-      q : q
-    };
     $("#trackDetailModal").modal();
+    var id = $(this).attr("id");
+    // カルーセルを作る
+    var carouselInner = $(".carousel-inner").empty();
+    var index = 0;
+    $("li", $(this).parent().parent()).each(function(i, o){
+      var titleNode = $("<span class='hide'>" + $(".track_artist", $(o)).text() + " " + $(".track_name", $(o)).text() + "</span>");
+      var bodyNode = $("<div class='item'></div>");
+      if ($("a",$(this)).attr("id") == id) {
+        bodyNode.addClass("active");
+        $("#trackDetailTitle").text(titleNode.text());
+      }
+      bodyNode.append(titleNode);
+      loadMovie(bodyNode);
+      carouselInner.append(bodyNode);
+    });
   });
 });

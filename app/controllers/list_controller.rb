@@ -5,7 +5,7 @@ class ListController < ApplicationController
     if user == nil
       render :file => "/404.html", :status => :not_found
     else
-      @artists = Artist.find(:all, :include => [{:albums => {:tracks => :user_tracks}}, :artist_aliases], :conditions => {:user_tracks => {:user_id => user.id}}, :order => 'artists.name, albums.name, tracks.track_no')
+      @artists = Artist.find(:all, :include => [{:albums => {:tracks => :user_tracks}}, :artist_aliases], :conditions => ["user_tracks.user_id = ? AND user_tracks.delete_flg = ?", user.id, false], :order => 'artists.name, albums.name, tracks.track_no')
     end
   end
 end
