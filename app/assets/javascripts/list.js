@@ -32,6 +32,7 @@ $(function(){
     parent.animate({opacity: "toggle", marginTop: "0px"}, 500);
   };
 
+  var playerList = [];
   function loadMovie(targetCarouselItem) {
     if (targetCarouselItem.hasClass("loaded")) {
       return;
@@ -58,7 +59,7 @@ $(function(){
         });
         targetCarouselItem.append("<div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
         targetCarouselItem.append("<h4>"+videoname+"</h4>");
-        var pp = new YT.Player('player-'+targetCarouselItem.attr("id"), {
+        playerList[playerList.length] = new YT.Player('player-'+targetCarouselItem.attr("id"), {
           height: '315',
           width: '560',
           videoId: videoid,
@@ -72,11 +73,19 @@ $(function(){
   };
 
   var playingPlayer;
+  var playCurrent = false;
   function onPlayerStateChange(e) {
     if (e.data == YT.PlayerState.PLAYING) {
+      if (playingPlayer) {
+        playingPlayer.stopVideo();
+      }
       playingPlayer = e.target;
     } else {
       playingPlayer = undefined;
+      if (e.data == YT.PlayerState.ENDED) {
+        $("#c").carousel("next");
+        playCurrent = true;
+      }
     }
   }
 
@@ -84,15 +93,26 @@ $(function(){
     $("#trackDetailTitle").text($(".active > span.title", $(this)).text());
     if (playingPlayer) {
       playingPlayer.stopVideo();
+      playingPlayer = undefined;
+    }
+    if (playCurrent) {
+      var index = $(".active", $(this)).index();
+      playerList[index].playVideo();
+      playingPlayer = playerList[index];
+      playCurrent = false;
     }
   });
 
   $("#c").carousel({interval:false});
 
+  $("#trackDetailModal").on("hidden", function() {
+    $(".carousel-inner", $(this)).empty();
+  });
+
   $('a[id^=track-]').click(function() {
     $("#trackDetailModal").modal();
+    playerList = [];
     var id = $(this).attr("id");
-    // カルーセルを作る
     var carouselInner = $(".carousel-inner").empty();
     var index = 0;
     $("li", $(this).parent().parent()).each(function(i, o){
