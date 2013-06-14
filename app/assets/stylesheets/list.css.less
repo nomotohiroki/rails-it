@@ -24,17 +24,48 @@
   margin-top: 5px;
 }
 #trackDetailModal {
-  width: 700px;
-  margin-left: -350px;
+  width: 640px;
+  margin-left: -320px;
 }
 #trackDetailModal.fade.in {
   top : 5%;
 }
 
 #trackDetailModal .modal-body {
+  padding: 0px;
   max-height: 500px;
 }
-.carousel-control {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+#trackDetailModal .item {
+  text-align: center;
+}
+#trackDetailModal .alert {
+  width: 358px;
+  height: 150px;
+  margin: 50px 120px 115px 120px;
+  padding: 20px;
+}
+.player {
+  width: 560px;
+  height: 315px;
 }
 
+.carousel-control {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  top: 20px;
+  height: 15px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  border: none;
+  padding-top: 140px;
+  padding-bottom: 160px;
+}
+.carousel-control.left {
+  left: 0px;
+}
+.carousel-control.right {
+  right: 0px;
+}
+.carousel-control:hover, .carousel-control:focus {
+  opacity: 0.3;
+}

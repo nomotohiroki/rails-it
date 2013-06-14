@@ -1,4 +1,12 @@
+var tag = document.createElement('script');
+
+tag.src = "//www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+
 $(function(){
+
   $('a[id^=artist-]').click(function(){
     if (!$(this).parent().hasClass("active")) {
       $('ul[id^=albums-], ul[id^=tracks-]').hide();
@@ -48,15 +56,35 @@ $(function(){
           videoname = item.media$group.media$title.$t;
           return false;
         });
+        targetCarouselItem.append("<div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
         targetCarouselItem.append("<h4>"+videoname+"</h4>");
-        targetCarouselItem.append("<div style='text-align:center;'><iframe width='560' height='315' src='http://www.youtube.com/embed/"+videoid+"' frameborder='0' allowfullscreen='allowfullscreen'></iframe></div>");
+        var pp = new YT.Player('player-'+targetCarouselItem.attr("id"), {
+          height: '315',
+          width: '560',
+          videoId: videoid,
+          events :{
+            'onStateChange': onPlayerStateChange
+          }
+        });
         targetCarouselItem.addClass("loaded");
       }
     );
   };
 
+  var playingPlayer;
+  function onPlayerStateChange(e) {
+    if (e.data == YT.PlayerState.PLAYING) {
+      playingPlayer = e.target;
+    } else {
+      playingPlayer = undefined;
+    }
+  }
+
   $("#c", $(this)).bind("slid", function() {
-    $("#trackDetailTitle").text($(".active > span", $(this)).text());
+    $("#trackDetailTitle").text($(".active > span.title", $(this)).text());
+    if (playingPlayer) {
+      playingPlayer.stopVideo();
+    }
   });
 
   $("#c").carousel({interval:false});
@@ -68,8 +96,8 @@ $(function(){
     var carouselInner = $(".carousel-inner").empty();
     var index = 0;
     $("li", $(this).parent().parent()).each(function(i, o){
-      var titleNode = $("<span class='hide'>" + $(".track_artist", $(o)).text() + " " + $(".track_name", $(o)).text() + "</span>");
-      var bodyNode = $("<div class='item'></div>");
+      var titleNode = $("<span class='hide title'>" + $(".track_artist", $(o)).text() + " " + $(".track_name", $(o)).text() + "</span>");
+      var bodyNode = $("<div id='item-"+$("a",$(this)).attr("id")+"' class='item'></div>");
       if ($("a",$(this)).attr("id") == id) {
         bodyNode.addClass("active");
         $("#trackDetailTitle").text(titleNode.text());
