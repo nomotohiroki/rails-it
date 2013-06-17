@@ -49,28 +49,58 @@ $(function(){
       function(result) {
         var videoid, videoname;
         if (result == undefined || result.feed == undefined || result.feed.entry == undefined || result.feed.entry.length == 0) {
-          targetCarouselItem.append("<div class='alert'>Sorry, We cannot found this songs movie from youtube</div>");
+          targetCarouselItem.append("<div class='alert'>Sorry, We cannot found this tracks movie from youtube</div>");
           return;
         }
+        var thumbsElm;
         $.each(result.feed.entry, function(i, item) {
           videoid = item.media$group.yt$videoid.$t;
           videoname = item.media$group.media$title.$t;
-          return false;
-        });
-        targetCarouselItem.append("<div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
-        targetCarouselItem.append("<h4>"+videoname+"</h4>");
-        playerList[playerList.length] = new YT.Player('player-'+targetCarouselItem.attr("id"), {
-          height: '315',
-          width: '560',
-          videoId: videoid,
-          events :{
-            'onStateChange': onPlayerStateChange
+          if (i == 0) {
+            targetCarouselItem.append("<div class='playerholder'><div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div></div>");
+            targetCarouselItem.append("<h4>"+videoname+"</h4>");
+            playerList[playerList.length] = new YT.Player('player-'+targetCarouselItem.attr("id"), {
+              height: '315',
+              width: '560',
+              videoId: videoid,
+              events :{
+                'onStateChange': onPlayerStateChange
+              }
+            });
+            targetCarouselItem.addClass("loaded");
+          }
+          if (i <= 4) {
+            if (thumbsElm == undefined) {
+              targetCarouselItem.append("<h6>other related videos</h6>");
+              targetCarouselItem.append("<ul id='thumbs'></ul>");
+              thumbsElm = $("#thumbs", targetCarouselItem);
+            }
+            thumbsElm.append("<li><a href='javascript:void(0);' class='thumb-"+videoid+"'><img src='"+item.media$group.media$thumbnail[0].url+"' title='"+videoname+"'/></a></li>");
           }
         });
-        targetCarouselItem.addClass("loaded");
+        $('a', thumbsElm).click(function() {
+          var target = $(this).parent().parent().parent();
+          var videoid = $(this).attr("class").replace("thumb-", "");
+          var videoname = $('img', $(this)).attr("title");
+          video(target, videoid, videoname);
+        });
       }
     );
   };
+
+  function video(o, videoid, videoname) {
+    $('.playerholder', o).html("<div id='player-"+o.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
+    $("h4", o).text(videoname);
+    playerList[o.parent().index(o)] = new YT.Player('player-'+o.attr("id"), {
+      height: '315',
+      width: '560',
+      videoId: videoid,
+      events :{
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
 
   var playingPlayer;
   var playCurrent = false;
