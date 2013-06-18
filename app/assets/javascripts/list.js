@@ -102,7 +102,7 @@ $(function(){
     $('.playerholder', o).html("<div id='player-"+o.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
     $("h4", o).text(videoname);
     var currentPlayer = playerList[$(".item", o.parent()).index(o)];
-    if (currentPlayer != undefined && currentPlayer.getPlayerState() == 1) {
+    if (currentPlayer != undefined && 'function' === typeof currentPlayer.getPlayerState && currentPlayer.getPlayerState() == 1) {
       currentPlayer.stopVideo();
     }
     playerList[$(".item", o.parent()).index(o)] = new YT.Player('player-'+o.attr("id"), {
@@ -126,7 +126,7 @@ $(function(){
   $("#c").bind("slide", function() {
     for (var i=0; i<playerList.length; i++) {
       var player = playerList[i];
-      if (playerList[i] != undefined && playerList[i].getPlayerState() == 1) {
+      if (playerList[i] != undefined && 'function' === typeof playerList.getPlayerState && playerList[i].getPlayerState() == 1) {
         playerList[i].stopVideo();
       }
     }
