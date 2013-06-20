@@ -18,7 +18,10 @@
   </form>
 </div>
 <script type="text/javascript">
+$(function(){
+  $('#cover').html($(this).val());
   $('#file-input').change(function() {
     $('#cover').html($(this).val());
   });
+});
 </script>

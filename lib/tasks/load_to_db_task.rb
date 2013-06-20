@@ -67,8 +67,10 @@ class Tasks::LoadToDbTask
         userTrack = UserTrack.new
         userTrack.user_id = user.id
         userTrack.track_id = track.id
+        userTrack.delete_flg = false
         userTrack.save
       end
+      Message.loadComplete(user.email, user.key).deliver
       user.update_attribute('complete', true)
     end
   end
