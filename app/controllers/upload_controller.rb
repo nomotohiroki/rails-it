@@ -10,7 +10,16 @@ class UploadController < ApplicationController
     crypt = Digest::SHA1.hexdigest(params[:email].crypt(salt))
     filepath = "tmp/xml/" + crypt + ".xml"
     File.open(filepath, "wb"){|f| f.write(file.read)}
-    @library = ITunes::Library.load(filepath)
+    begin
+      @library = ITunes::Library.load(filepath)
+    rescue
+      # plistじゃなかった。
+      render :template => "common/upload_error.html"
+      return
+    end
+# トラックが0件の場合
+
+
     # tmp保存
     # チェック
     # OKならDBにメールアドレスとか保存
@@ -25,12 +34,12 @@ class UploadController < ApplicationController
     if user.save
       redirect_to :action=>"complete"
     else
-      
+      # なんだかわからないけどエラー
     end
   end
 
   def complete
-
+    # nothing to do
   end
 
 

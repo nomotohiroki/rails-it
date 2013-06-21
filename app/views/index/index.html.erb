@@ -1,4 +1,4 @@
-<div id="contents" class="text-center">
+<div class="text-center">
   <h1>upload your iTunes Library XML file</h1>
   <form action="/upload/uploadItunesXml" method="POST" enctype="multipart/form-data">
     <input type="file" id="file-input" name="itunesXml" style="display: none;">
@@ -19,7 +19,9 @@
 </div>
 <script type="text/javascript">
 $(function(){
-  $('#cover').html($(this).val());
+  if ($('#file-input').val()) {
+    $('#cover').html($('#file-input').val());
+  }
   $('#file-input').change(function() {
     $('#cover').html($(this).val());
   });
