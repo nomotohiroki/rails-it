@@ -93,27 +93,25 @@ $(function(){
     );
   };
 
-  var lock = false;
   function video(o, videoid, videoname) {
-    if (lock) {
-      return;
-    }
-    lock = true;
-    $('.playerholder', o).html("<div id='player-"+o.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
-    $("h4", o).text(videoname);
     var currentPlayer = playerList[$(".item", o.parent()).index(o)];
     if (currentPlayer != undefined && 'function' === typeof currentPlayer.getPlayerState && currentPlayer.getPlayerState() == 1) {
       currentPlayer.stopVideo();
     }
-    playerList[$(".item", o.parent()).index(o)] = new YT.Player('player-'+o.attr("id"), {
-      height: '315',
-      width: '560',
-      videoId: videoid,
-      events :{
-        'onStateChange': onPlayerStateChange
-      }
-    });
-    lock = false;
+    $('.playerholder', o).html("<div id='player-"+o.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
+    $("h4", o).text(videoname);
+    try {
+      playerList[$(".item", o.parent()).index(o)] = new YT.Player('player-'+o.attr("id"), {
+        height: '315',
+        width: '560',
+        videoId: videoid,
+        events :{
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    } catch (e) {
+      // only catch
+    }
   }
 
 
