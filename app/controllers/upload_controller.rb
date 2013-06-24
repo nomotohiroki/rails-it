@@ -17,8 +17,11 @@ class UploadController < ApplicationController
       render :template => "common/upload_error.html"
       return
     end
-# トラックが0件の場合
-
+    # トラックが0件の場合
+    if @library.tracks.size == 0
+      render :template => "common/upload_error.html"
+      return
+    end
 
     # tmp保存
     # チェック

@@ -57,8 +57,9 @@ $(function(){
           videoid = item.media$group.yt$videoid.$t;
           videoname = item.media$group.media$title.$t;
           if (i == 0) {
+            $("#deleteTrackId").text(targetCarouselItem.attr("id").replace("item-track-", ""));
             targetCarouselItem.append("<div class='playerholder'><div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div></div>");
-            targetCarouselItem.append("<h4>"+videoname+"</h4>");
+            targetCarouselItem.append("<div><a href='http://www.youtube.com/watch?v="+videoid+"' class='ytlink' target='_blank'>"+videoname+"</a></div>");
             playerList[index] = new YT.Player('player-'+targetCarouselItem.attr("id"), {
               height: '315',
               width: '560',
@@ -71,7 +72,7 @@ $(function(){
           }
           if (i <= 4) {
             if (thumbsElm == undefined) {
-              targetCarouselItem.append("<h6>other related videos</h6>");
+              targetCarouselItem.append("<div>related videos</div>");
               targetCarouselItem.append("<ul id='thumbs'></ul>");
               thumbsElm = $("#thumbs", targetCarouselItem);
             }
@@ -99,7 +100,7 @@ $(function(){
       currentPlayer.stopVideo();
     }
     $('.playerholder', o).html("<div id='player-"+o.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div>");
-    $("h4", o).text(videoname);
+    $(".ytlink", o).text(videoname).attr("href", "http://www.youtube.com/watch?v="+videoid);
     try {
       playerList[$(".item", o.parent()).index(o)] = new YT.Player('player-'+o.attr("id"), {
         height: '315',
@@ -132,6 +133,7 @@ $(function(){
 
   $("#c").bind("slid", function() {
     $("#trackDetailTitle").text($(".active > span.title", $(this)).text());
+    $("#deleteTrackId").text($(".active", $(this)).attr("id").replace("item-track-", ""));
     for (var i=0; i<playerList.length; i++) {
       if (playerList[i] != undefined && playerList[i].getPlayerState() == 1) {
         playerList[i].stopVideo();
@@ -163,5 +165,18 @@ $(function(){
       loadMovie(bodyNode, i);
       carouselInner.append(bodyNode);
     });
+  });
+  $("#deleteTrack").click(function(){
+    var result = confirm("Delete This Track?");
+    if (result) {
+      $.getJSON(
+        "/track/delete",
+        {
+          id: $("#deleteTrackId").text(),
+          key: location.href.substring(location.href.lastIndexOf("/")+1, location.href.lastIndexOf("/")+41)
+        },
+        function(result) {}
+      );
+    }
   });
 });
