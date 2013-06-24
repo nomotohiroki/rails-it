@@ -1,23 +1,12 @@
 ItunesLib::Application.routes.draw do
   get "track/detail"
-
   get "track/delete"
-
-  resources :artist_aliases
-  resources :user_tracks
-  resources :albums
-  resources :artists
-  resources :tracks
-  resources :users
 
   post "upload/uploadItunesXml"
 
-  resources :tracks  # The priority is based upon order of creation:
+  # The priority is based upon order of creation:
   # first created -> highest priority.
 
-  match 'hello' => 'first#hello'
-  match 'bye'   => 'first#bye'
-  match 'lib'   => 'first#lib'
   match 'upload/complete' => 'upload#complete'
   root :to => 'index#index'
   match 'list/:key' => 'list#list'
