@@ -57,7 +57,6 @@ $(function(){
           videoid = item.media$group.yt$videoid.$t;
           videoname = item.media$group.media$title.$t;
           if (i == 0) {
-            $("#deleteTrackId").text(targetCarouselItem.attr("id").replace("item-track-", ""));
             targetCarouselItem.append("<div class='playerholder'><div id='player-"+targetCarouselItem.attr("id")+"' class='player'><span class='hide'>"+videoid+"</span></div></div>");
             targetCarouselItem.append("<div><a href='http://www.youtube.com/watch?v="+videoid+"' class='ytlink' target='_blank'>"+videoname+"</a></div>");
             playerList[index] = new YT.Player('player-'+targetCarouselItem.attr("id"), {
@@ -158,6 +157,7 @@ $(function(){
       var titleNode = $("<span class='hide title'>" + $(".track_artist", $(o)).text() + " " + $(".track_name", $(o)).text() + "</span>");
       var bodyNode = $("<div id='item-"+$("a",$(this)).attr("id")+"' class='item'></div>");
       if ($("a",$(this)).attr("id") == id) {
+        $("#deleteTrackId").text($("a",$(this)).attr("id").replace("track-", ""));
         bodyNode.addClass("active");
         $("#trackDetailTitle").text(titleNode.text());
       }
@@ -175,7 +175,13 @@ $(function(){
           id: $("#deleteTrackId").text(),
           key: location.href.substring(location.href.lastIndexOf("/")+1, location.href.lastIndexOf("/")+41)
         },
-        function(result) {}
+        function(result) {
+          if (result != undefined) {
+            $("#c").carousel('next');
+            $("a[id=track-"+result.track_id+"]").parent().remove();
+            $("div[id=item-track-"+result.track_id+"]").remove();
+          }
+        }
       );
     }
   });
